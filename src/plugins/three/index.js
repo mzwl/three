@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import THREE from 'three'
-// import {OBJLoader} from 'three/examples/js/loaders/OBJLoader.js'
-//
+
 const provide = (settings) => {
   console.log(settings)
   return class Three extends Component {
@@ -21,7 +20,6 @@ const provide = (settings) => {
     componentDidMount(){
       const { renderTo } = this.refs
       const { data } = this.props
-      console.log(this.props)
       var scene, camera, renderer, ballMesh, light, controls
       var ballRadius = 5
       var width = window.innerWidth - 50
@@ -33,16 +31,12 @@ const provide = (settings) => {
       })
       renderer.setSize(width,height)
       renderer.setClearColor(0x000000)
-      // width = '400px'
-      // height = '300px'
-      // renderer.setSize(width, height)
       scene = new THREE.Scene()
 
       camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000)
       camera.position.set(100, 140, 80)
       camera.lookAt(new THREE.Vector3(0, 0, 0));
       controls = new THREE.TrackballControls( camera );
-      console.log(controls)
       controls.rotateSpeed = 1.0;
       controls.zoomSpeed = 1.2;
       controls.panSpeed = 0.8;
@@ -53,25 +47,13 @@ const provide = (settings) => {
       controls.keys = [ 65, 83, 68 ];
       controls.addEventListener( 'change', render );
       window.addEventListener( 'resize', onWindowResize, false );
+      scene.add(camera)
 
       light = new THREE.DirectionalLight(0xffffff)
       light.position.set(10, 10, 15)
       scene.add(light)
 
-      ballMesh = new THREE.Mesh(new THREE.SphereGeometry(ballRadius, 16, 8),
-        new THREE.MeshLambertMaterial({
-          color: 0xffff00
-        })
-      )
-      for(var j = -1; j <= 2; j++){
-        for(var i = 0; i <= 2; i++){
-        var drawMesh = ballMesh.clone()
-        drawMesh.position.set(j*30,5,-30*i)
-        scene.add(drawMesh)
-        }
-      }
-
-      var cube = new THREE.Mesh(new THREE.BoxGeometry(5, 5, 5),
+      var cube = new THREE.Mesh(new THREE.SphereGeometry(ballRadius, 16, 8),
         new THREE.MeshLambertMaterial({
           color: 0x00ff00
         })
@@ -107,12 +89,17 @@ const provide = (settings) => {
         scene.add(line2)
       }
 
-      var loader = new THREE.JSONLoader()
-      loader.load('/three', function(geometry, materials){
-        var material = new THREE.MultiMaterial(materials);
-        var object = new THREE.Mesh(geometry, material);
-        scene.add(object)
-      })
+      var Vloader = new THREE.OBJLoader();
+      Vloader.load('widgets/three/data/host.obj', function(obj) {
+        var newMesh = obj.clone()
+        for(var j = -1; j <= 2; j++){
+          for(var i = 0; i <= 2; i++){
+          var drawMesh = newMesh.clone()
+            drawMesh.position.set(j*30,0,-30*i)
+            scene.add(drawMesh)
+          }
+        }
+       })
 
       var geometry = new THREE.Geometry();
       geometry.vertices.push(new THREE.Vector3(-200, 0, 0));
@@ -135,9 +122,9 @@ const provide = (settings) => {
           scene.add(line)
         }
 
-      renderer.render(scene, camera)
+      render()
       function render(){
-        renderer.clear();
+        // renderer.clear();
         renderer.render(scene, camera);
         requestAnimationFrame(render);
       }
@@ -148,7 +135,8 @@ const provide = (settings) => {
         controls.handleResize();
         render();
       }
-      window.onload = animate
+      animate()
+
       function animate() {
         requestAnimationFrame( animate );
         controls.update();
