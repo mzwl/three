@@ -1,14 +1,31 @@
 {
-  "name": "demo",
-  "version": "1.0.0",
+  "name": "three",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "medivh-plugin-tool serve"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "MedivhPluginToolConfig": {
+    "pluginName": "test-medivh-plugin-sdk",
+    "medivhServer": "http://localhost:9527",
+    "build": {
+      "srcDir": "src",
+      "outDir": "target",
+      "dllPath": "medivh-web/target/production/public/vendor.json"
+    },
+    "serve": {
+      "sceneDir": "scene",
+      "host": "0.0.0.0",
+      "port": 9526
+    }
+  },
   "devDependencies": {
-    "medivh-web-plugin-sdk": "^0.4.3-3"
-  }
+    "medivh-web-plugin-sdk": "^0.4.2",
+    "three.js": "^0.77.1"
+  },
+  "dependencies": {}
 }
