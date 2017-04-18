@@ -20,10 +20,12 @@ const provide = (settings) => {
     componentDidMount(){
       const { renderTo } = this.refs
       const { data } = this.props
+      console.log(data,1)
       var scene, camera, renderer, ballMesh, light, controls
       var ballRadius = 5
       var width = window.innerWidth - 50
       var height = window.innerHeight - 100
+      var color = 0x00ff00
 
       renderer = new THREE.WebGLRenderer({
         antialias : true,
@@ -34,7 +36,8 @@ const provide = (settings) => {
       scene = new THREE.Scene()
 
       camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000)
-      camera.position.set(100, 140, 80)
+      camera.position.set(-120, 110, 100)
+      console.log(camera.position)
       camera.lookAt(new THREE.Vector3(0, 0, 0));
       controls = new THREE.TrackballControls( camera );
       controls.rotateSpeed = 1.0;
@@ -50,55 +53,83 @@ const provide = (settings) => {
       scene.add(camera)
 
       light = new THREE.DirectionalLight(0xffffff)
-      light.position.set(10, 10, 15)
+      light.position.set(-120, 110, 100)
       scene.add(light)
 
       var cube = new THREE.Mesh(new THREE.SphereGeometry(ballRadius, 16, 8),
         new THREE.MeshLambertMaterial({
-          color: 0x00ff00
+          color: 0x0000ff
         })
       )
       cube.position.set(15,5,50)
       scene.add(cube)
 
 
-      var geometry = new THREE.Geometry()
-      geometry.vertices.push(new THREE.Vector3(15, 5, 50));
-      geometry.vertices.push(new THREE.Vector3(-15, 5, 50));
-      geometry.vertices.push(new THREE.Vector3(-15,5,-60));
-      var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0xFF0000}))
-      scene.add(line)
-      var geometry1 = new THREE.Geometry()
-      geometry1.vertices.push(new THREE.Vector3(15, 5, 50));
-      geometry1.vertices.push(new THREE.Vector3(45, 5, 50));
-      geometry1.vertices.push(new THREE.Vector3(45,5,-60));
-      var line = new THREE.Line(geometry1, new THREE.LineBasicMaterial({color: 0xFF0000}))
-      scene.add(line)
 
-      var geometry2 = new THREE.Geometry()
-      for(var i = 0; i <= 2; i++){
-        geometry2.vertices.push(new THREE.Vector3(-30,5,0))
-        geometry2.vertices.push(new THREE.Vector3(0,5,0))
-        var line = new THREE.Line(geometry2, new THREE.LineBasicMaterial({color: 0xFF0000}))
-        line.position.z = -30*i
-        scene.add(line)
 
-        var line2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({color: 0xFF0000}))
-        line2.position.z = -30*i
-        line2.position.x = 60
-        scene.add(line2)
-      }
+      // var geometry2 = new THREE.Geometry()
+      // for(var i = 0; i <= 2; i++){
+      //   geometry2.vertices.push(new THREE.Vector3(-30,5,0))
+      //   geometry2.vertices.push(new THREE.Vector3(0,5,0))
+      //   var line = new THREE.Line(geometry2, new THREE.LineBasicMaterial({color: 0x00ff00}))
+      //   line.position.z = -30*i
+      //   scene.add(line)
+      //
+      //   var line2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({color: 0x00ff00}))
+      //   line2.position.z = -30*i
+      //   line2.position.x = 60
+      //   scene.add(line2)
+      // }
 
       var Vloader = new THREE.OBJLoader();
       Vloader.load('widgets/three/data/host.obj', function(obj) {
         var newMesh = obj.clone()
-        for(var j = -1; j <= 2; j++){
+        for(var j = -2; j <= -1; j++){
           for(var i = 0; i <= 2; i++){
           var drawMesh = newMesh.clone()
             drawMesh.position.set(j*30,0,-30*i)
             scene.add(drawMesh)
           }
         }
+        for(var i = 0; i <= 2; i++){
+        var drawMesh2 = newMesh.clone()
+          drawMesh2.position.set(60,0,-30*i)
+          scene.add(drawMesh2)
+          var geometry = new THREE.Geometry()
+          geometry.vertices.push(new THREE.Vector3(15, 5, 50));
+          geometry.vertices.push(new THREE.Vector3(15,5,-30));
+          var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: color}))
+          scene.add(line)
+          var geometry1 = new THREE.Geometry()
+          geometry1.vertices.push(new THREE.Vector3(16,5,-30),
+           new THREE.Vector3(16, 5, -5),
+           new THREE.Vector3(60,5,-5),
+           new THREE.Vector3(60,5,0)
+          );
+          var line = new THREE.Line(geometry1, new THREE.LineBasicMaterial({color: color}))
+          scene.add(line)
+          var geometry1 = new THREE.Geometry()
+          geometry1.vertices.push(new THREE.Vector3(16,5,-30),
+            new THREE.Vector3(16, 5, -35),
+            new THREE.Vector3(60,5,-35),
+            new THREE.Vector3(60,5,-30)
+          );
+          var line = new THREE.Line(geometry1, new THREE.LineBasicMaterial({color: color}))
+          scene.add(line)
+          var geometry1 = new THREE.Geometry()
+          geometry1.vertices.push(new THREE.Vector3(15,5,-30),
+            new THREE.Vector3(15, 5, -65),
+            new THREE.Vector3(60,5,-65),
+            new THREE.Vector3(60,5,-60)
+          );
+          var line = new THREE.Line(geometry1, new THREE.LineBasicMaterial({color: color}))
+          scene.add(line)
+          console.log(drawMesh2.position)
+        }
+
+        var drawMesh3 = newMesh.clone()
+          drawMesh3.position.set(15,0,-30)
+          scene.add(drawMesh3)
        })
 
       var geometry = new THREE.Geometry();
